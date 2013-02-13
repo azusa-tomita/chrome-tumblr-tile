@@ -27,9 +27,26 @@ tumblrTile || (function() {
 
         this.config = $.extend(defaultConfig, config);
     }
-
+    function date(){
+        var date = new Date();
+        var year  = date.getFullYear();
+        var month  = date.getMonth() + 1;
+        var day    = date.getDate();
+        var hour   = date.getHours();
+        var minute = date.getMinutes();
+        var second = date.getSeconds();
+        if (month < 10) {month = "0" + month;}
+        if (day < 10) {day = "0" + day;}
+        if (hour < 10) {hour = "0" + hour;}
+        if (minute < 10) {minute = "0" + minute;}
+        if (second < 10) {second = "0" + second;}
+        var fullData = year+"-"+month+"-"+day+" "+hour+":"+minute+":"+second;
+        return Date.parse( fullData.replace( /-/g, '/') ) / 1000
+    }
     function draw() {
         var self = this;
+        var backCount = 1;
+
 
         self.loadConfig();
 
@@ -60,6 +77,9 @@ tumblrTile || (function() {
         }).then(function() {
             $(window).scroll(function() {
                 if ( isAccessTumblr == false && $(window).scrollTop() + $(window).height() >= $(document).height() ) {
+                    console.log(param.ts);
+
+                    param.ts = param.ts - (864000 * backCount);
 
                     isAccessTumblr = true;
                     var divs = "";
@@ -72,9 +92,11 @@ tumblrTile || (function() {
 
                         var $divs = $(divs);
                         $("#container").append($divs).masonry( 'appended', $divs, false );
+
                     }).then(function() {
                         isAccessTumblr = false;
                     });
+                    backCount++;
                 }
             });
         });
@@ -86,10 +108,11 @@ tumblrTile || (function() {
         var self = this;
         var d = $.Deferred();
         param.api_key = self.config.apiKey;
-
+        var randomDate = 864000 * (1 + Math.floor( Math.random() * 100 ));
+        param.ts = date() - randomDate;
 
         $.getJSON(
-            "https://api.tumblr.com/v2/tagged?tag=" + self.config.tagname + "&api_key=" + param.api_key,
+            "https://api.tumblr.com/v2/tagged?tag=" + self.config.tagname + "&api_key=" + param.api_key + "&before=" + param.ts,
             function(json) {
                 json.response.forEach(function(val, index, array) {
                     if ( ! val.photos ) {
