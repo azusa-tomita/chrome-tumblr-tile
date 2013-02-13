@@ -89,7 +89,7 @@ tumblrTile || (function() {
 
         $.getJSON(
             //"https://api.tumblr.com/v2/blog/" + self.config.hostname + "/posts/photo",
-            "hapi.tumblr.com/v2/新垣結衣",
+            "http://www.tumblr.com/tagged/%E6%96%B0%E5%9E%A3%E7%B5%90%E8%A1%A3",
             param,
             function(json) {
 
