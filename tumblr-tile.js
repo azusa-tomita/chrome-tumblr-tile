@@ -20,7 +20,7 @@ tumblrTile || (function() {
         var config    = configStr ? JSON.parse(configStr) : {};
 
         var defaultConfig = {
-            hostname : "gakkyrocks.tumblr.com",
+            tagname : "%E6%96%B0%E5%9E%A3%E7%B5%90%E8%A1%A3",
             baseWidth: 250,
             margin   : 10
         };
@@ -87,16 +87,16 @@ tumblrTile || (function() {
         var d = $.Deferred();
         param.api_key = self.config.apiKey;
 
-        $.getJSON(
-            //"https://api.tumblr.com/v2/blog/" + self.config.hostname + "/posts/photo",
-            "http://www.tumblr.com/tagged/%E6%96%B0%E5%9E%A3%E7%B5%90%E8%A1%A3",
-            param,
-            function(json) {
 
-                json.response.posts.forEach(function(val, index, array) {
+        $.getJSON(
+            "https://api.tumblr.com/v2/tagged?tag=" + self.config.tagname + "&api_key=" + param.api_key,
+            function(json) {
+                json.response.forEach(function(val, index, array) {
                     if ( ! val.photos ) {
                         return 1;
+
                     }
+
                     var j    = 0;
                     var diffSizes = val.photos[0].alt_sizes.map(function(alt_size) {
                         return {
@@ -117,13 +117,13 @@ tumblrTile || (function() {
 
                     var altSize = val.photos[0].alt_sizes[diffSizes[0].index]
                     var div = '<div class="item"><img src="' + altSize.url+ '" width="' + altSize.width + '" height="' + altSize.height + '" /></div>';
+
                     func(div);
                 });
 
                 d.resolve();
             }
         );
-
         return d;
     }
 
