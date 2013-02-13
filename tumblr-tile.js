@@ -88,7 +88,8 @@ tumblrTile || (function() {
         param.api_key = self.config.apiKey;
 
         $.getJSON(
-            "https://api.tumblr.com/v2/blog/" + self.config.hostname + "/posts/photo",
+            //"https://api.tumblr.com/v2/blog/" + self.config.hostname + "/posts/photo",
+            "hapi.tumblr.com/v2/新垣結衣",
             param,
             function(json) {
 
