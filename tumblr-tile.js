@@ -108,7 +108,7 @@ tumblrTile || (function() {
         var self = this;
         var d = $.Deferred();
         param.api_key = self.config.apiKey;
-        var randomDate = 864000 * (1 + Math.floor( Math.random() * 100 ));
+        var randomDate = 144000 * (1 + Math.floor( Math.random() * 100 ));
         param.ts = date() - randomDate;
 
         $.getJSON(
